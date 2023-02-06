@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { axiosInstance } from "../api/axios.config";
 import ImageSkeleton from "../shared/ImageSkeleton";
 
@@ -21,7 +22,7 @@ const UserDetails = ({ id, setUserId }) => {
       <div onClick={() => setUserId(-1)} className="cursor-pointer">
         🔙
       </div>
-      <img src={user.image} alt="" />
+      <LazyLoadImage alt={user.firstName} height={300} src={user.image} width={250} effect="blur" />
     </div>
   );
 };

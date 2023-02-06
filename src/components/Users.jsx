@@ -11,7 +11,7 @@ const Users = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/users")
+      .get("/users?limit=100")
       .then(res => setUserList(res.data.users))
       .catch(err => console.log(err))
       .finally(() => setIsLoading(false));
