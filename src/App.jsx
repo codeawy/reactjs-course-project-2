@@ -2,7 +2,7 @@ import Tabs from "./shared/Tabs/Tabs";
 
 const App = () => {
   return (
-    <div>
+    <div className="container">
       <Tabs />
     </div>
   );
