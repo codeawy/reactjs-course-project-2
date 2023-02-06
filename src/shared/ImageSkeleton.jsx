@@ -1,6 +1,10 @@
-const ImageSkeleton = () => {
+const ImageSkeleton = ({ isCenter = false }) => {
   return (
-    <div className="flex items-center justify-center w-full h-48 bg-gray-300 rounded  dark:bg-transparent border-2 border-indigo-500">
+    <div
+      className={`${
+        isCenter ? "mx-auto max-w-[200px]" : ""
+      } flex items-center justify-center w-full h-48 bg-gray-300 rounded  dark:bg-transparent border-2 border-indigo-500`}
+    >
       <svg
         className="w-12 h-12 text-gray-200"
         xmlns="http://www.w3.org/2000/svg"
