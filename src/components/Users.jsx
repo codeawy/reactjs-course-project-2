@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { axiosInstance } from "../api/axios.config";
 import Checkbox from "../shared/Checkbox/Checkbox";
 import ImageSkeleton from "../shared/ImageSkeleton";
@@ -7,8 +8,6 @@ import User from "./User";
 import UserDetails from "./UserDetails";
 
 const Users = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [userList, setUserList] = useState([]);
   const [userId, setUserId] = useState(-1);
   const [limit, setLimit] = useState(30);
   const [queryParams, setQueryParams] = useState({
@@ -17,22 +16,20 @@ const Users = () => {
     domain: "",
   });
 
+  const getUserList = async () => {
+    const { ip, password, domain } = queryParams;
+    const { data } = await axiosInstance.get(
+      `/users?limit=${limit}&select=image${ip}${password}${domain}`
+    );
+    return data;
+  };
+
+  const { isLoading, isError, isFetching, data } = useQuery("users", () => getUserList());
+
   const onQueryParamsChanged = e => {
     const { name, checked } = e.target;
     setQueryParams({ ...queryParams, [name]: checked ? `,${name}` : "" });
   };
-
-  useEffect(() => {
-    const { ip, password, domain } = queryParams;
-
-    axiosInstance
-      .get(`/users?limit=${limit}&select=image${ip}${password}${domain}`)
-      .then(res => {
-        setUserList(res.data.users);
-      })
-      .catch(err => console.log(err))
-      .finally(() => setIsLoading(false));
-  }, [limit, queryParams]); // ** Dependency List
 
   if (isLoading)
     return (
@@ -63,7 +60,7 @@ const Users = () => {
             <Checkbox label="Domain" onChange={onQueryParamsChanged} name="domain" />
           </div>
           <div className="grid grid-cols-grid-layout gap-4">
-            {userList.map(user => (
+            {data.users.map(user => (
               <User key={user.id} {...user} setUserId={setUserId} />
             ))}
           </div>
@@ -78,3 +75,4 @@ export default Users;
 // ** React Query
 // ** User Details
 // ** API Pagination
+// ** Custom Hooks
