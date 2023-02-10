@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../api/axios.config";
 import ImageSkeleton from "../shared/ImageSkeleton";
+import Select from "../shared/Select/Select";
 import User from "./User";
 import UserDetails from "./UserDetails";
 
@@ -11,8 +12,10 @@ const Users = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/users?limit=100")
-      .then(res => setUserList(res.data.users))
+      .get("/users")
+      .then(res => {
+        setUserList(res.data.users);
+      })
       .catch(err => console.log(err))
       .finally(() => setIsLoading(false));
   }, []);
@@ -33,11 +36,19 @@ const Users = () => {
       {userId > 0 ? (
         <UserDetails id={userId} setUserId={setUserId} />
       ) : (
-        <div className="grid grid-cols-grid-layout gap-4">
-          {userList.map(user => (
-            <User key={user.id} {...user} setUserId={setUserId} />
-          ))}
-        </div>
+        <>
+          <Select
+            id="limit"
+            label={"Limit: "}
+            optionList={[10, 20, 40]}
+            onChange={e => console.log(e.target.value)}
+          />
+          <div className="grid grid-cols-grid-layout gap-4">
+            {userList.map(user => (
+              <User key={user.id} {...user} setUserId={setUserId} />
+            ))}
+          </div>
+        </>
       )}
     </>
   );
