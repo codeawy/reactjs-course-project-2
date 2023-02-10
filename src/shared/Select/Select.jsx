@@ -1,5 +1,4 @@
 const Select = ({ id, label, optionList = [], onChange = () => {} }) => {
-  console.log(optionList);
   return (
     <div className="flex items-center">
       <label htmlFor={id} className="block mr-2 text-md font-medium text-gray-900 dark:text-white ">

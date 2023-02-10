@@ -9,16 +9,17 @@ const Users = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userList, setUserList] = useState([]);
   const [userId, setUserId] = useState(-1);
+  const [limit, setLimit] = useState(30);
 
   useEffect(() => {
     axiosInstance
-      .get("/users")
+      .get(`/users?limit=${limit}`)
       .then(res => {
         setUserList(res.data.users);
       })
       .catch(err => console.log(err))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [limit]);
 
   if (isLoading)
     return (
@@ -40,8 +41,8 @@ const Users = () => {
           <Select
             id="limit"
             label={"Limit: "}
-            optionList={[10, 20, 40]}
-            onChange={e => console.log(e.target.value)}
+            optionList={[10, 30, 50, 100]}
+            onChange={e => setLimit(e.target.value)}
           />
           <div className="grid grid-cols-grid-layout gap-4">
             {userList.map(user => (
