@@ -12,25 +12,27 @@ const Users = () => {
   const [userId, setUserId] = useState(-1);
   const [limit, setLimit] = useState(30);
   const [queryParams, setQueryParams] = useState({
-    ip: null,
-    password: null,
-    domain: null,
+    ip: "",
+    password: "",
+    domain: "",
   });
 
   const onQueryParamsChanged = e => {
     const { name, checked } = e.target;
-    setQueryParams({ ...queryParams, [name]: checked });
+    setQueryParams({ ...queryParams, [name]: checked ? `,${name}` : "" });
   };
 
   useEffect(() => {
+    const { ip, password, domain } = queryParams;
+
     axiosInstance
-      .get(`/users?limit=${limit}&select=image`)
+      .get(`/users?limit=${limit}&select=image${ip}${password}${domain}`)
       .then(res => {
         setUserList(res.data.users);
       })
       .catch(err => console.log(err))
       .finally(() => setIsLoading(false));
-  }, [limit]);
+  }, [limit, queryParams]); // ** Dependency List
 
   if (isLoading)
     return (
@@ -72,3 +74,7 @@ const Users = () => {
 };
 
 export default Users;
+
+// ** React Query
+// ** User Details
+// ** API Pagination
