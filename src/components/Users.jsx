@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../api/axios.config";
+import Checkbox from "../shared/Checkbox/Checkbox";
 import ImageSkeleton from "../shared/ImageSkeleton";
 import Select from "../shared/Select/Select";
 import User from "./User";
@@ -38,6 +39,7 @@ const Users = () => {
         <UserDetails id={userId} setUserId={setUserId} />
       ) : (
         <>
+          <Checkbox />
           <Select
             id="limit"
             label={"Limit: "}
