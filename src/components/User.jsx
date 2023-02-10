@@ -9,7 +9,7 @@ const User = ({ id, image, setUserId }) => {
       onClick={() => setUserId(id)}
     >
       <LazyLoadImage
-        alt={image.alt}
+        alt={image?.alt}
         src={`${image}?size=150x150&set=set1`}
         effect="blur"
         placeholderSrc={imgPlaceholder}

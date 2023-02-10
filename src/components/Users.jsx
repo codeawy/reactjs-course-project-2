@@ -11,10 +11,20 @@ const Users = () => {
   const [userList, setUserList] = useState([]);
   const [userId, setUserId] = useState(-1);
   const [limit, setLimit] = useState(30);
+  const [queryParams, setQueryParams] = useState({
+    ip: null,
+    password: null,
+    domain: null,
+  });
+
+  const onQueryParamsChanged = e => {
+    const { name, checked } = e.target;
+    setQueryParams({ ...queryParams, [name]: checked });
+  };
 
   useEffect(() => {
     axiosInstance
-      .get(`/users?limit=${limit}`)
+      .get(`/users?limit=${limit}&select=image`)
       .then(res => {
         setUserList(res.data.users);
       })
@@ -39,13 +49,17 @@ const Users = () => {
         <UserDetails id={userId} setUserId={setUserId} />
       ) : (
         <>
-          <Checkbox />
           <Select
             id="limit"
             label={"Limit: "}
             optionList={[10, 30, 50, 100]}
             onChange={e => setLimit(e.target.value)}
           />
+          <div className="flex items-center justify-center mb-5">
+            <Checkbox label="IP" onChange={onQueryParamsChanged} name="ip" />
+            <Checkbox label="Password" onChange={onQueryParamsChanged} name="password" />
+            <Checkbox label="Domain" onChange={onQueryParamsChanged} name="domain" />
+          </div>
           <div className="grid grid-cols-grid-layout gap-4">
             {userList.map(user => (
               <User key={user.id} {...user} setUserId={setUserId} />
