@@ -24,7 +24,9 @@ const Users = () => {
     return data;
   };
 
-  const { isLoading, isError, isFetching, data } = useQuery("users", () => getUserList());
+  const { isLoading, isError, isFetching, data } = useQuery(["users", queryParams, limit], () =>
+    getUserList()
+  );
 
   const onQueryParamsChanged = e => {
     const { name, checked } = e.target;
@@ -55,9 +57,24 @@ const Users = () => {
             onChange={e => setLimit(e.target.value)}
           />
           <div className="flex items-center justify-center mb-5">
-            <Checkbox label="IP" onChange={onQueryParamsChanged} name="ip" />
-            <Checkbox label="Password" onChange={onQueryParamsChanged} name="password" />
-            <Checkbox label="Domain" onChange={onQueryParamsChanged} name="domain" />
+            <Checkbox
+              label="IP"
+              checked={queryParams.ip}
+              onChange={onQueryParamsChanged}
+              name="ip"
+            />
+            <Checkbox
+              label="Password"
+              checked={queryParams.password}
+              onChange={onQueryParamsChanged}
+              name="password"
+            />
+            <Checkbox
+              label="Domain"
+              checked={queryParams.domain}
+              onChange={onQueryParamsChanged}
+              name="domain"
+            />
           </div>
           <div className="grid grid-cols-grid-layout gap-4">
             {data.users.map(user => (
