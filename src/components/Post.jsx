@@ -1,4 +1,5 @@
 import { txtSlicer } from "../utils/func";
+import CachedEmoji from "./CachedEmoji";
 
 const Post = ({ id, title, body, setPostId }) => {
   return (
@@ -15,6 +16,7 @@ const Post = ({ id, title, body, setPostId }) => {
       <p className="mb-1 text-sm">
         <span className="font-semibold">Description</span>: {txtSlicer(body, 80)}
       </p>
+      <CachedEmoji isCached />
     </div>
   );
 };
