@@ -1,16 +1,35 @@
 import axios from "axios";
+import { useState } from "react";
 import { useQuery } from "react-query";
+import Pagination from "../shared/Pagination";
 import Spinner from "../shared/Spinner";
 import TextSkeleton from "../shared/TextSkeleton";
 import Post from "./Post";
 
 const Posts = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const TOTAL = 100;
+
   const getPostList = async () => {
-    const { data } = await axios.get(`https://jsonplaceholder.typicode.com/posts`);
+    const { data } = await axios.get(
+      `https://jsonplaceholder.typicode.com/posts?_limit=${limit}&_page=${currentPage}`
+    );
     return data;
   };
 
-  const { isLoading, isError, isFetching, data, error } = useQuery(["posts"], () => getPostList());
+  const { isLoading, isError, isFetching, data, error } = useQuery(["posts", currentPage], () =>
+    getPostList()
+  );
+
+  const onClickPrevHandler = () => {
+    if (currentPage <= 1) return;
+    setCurrentPage(prev => prev - 1);
+  };
+  const onClickNextHandler = () => {
+    if (currentPage * limit >= TOTAL) return;
+    setCurrentPage(prev => prev + 1);
+  };
 
   if (isError && error.response.status === 404) {
     return (
@@ -57,6 +76,15 @@ const Posts = () => {
           return <Post key={item.id} {...item} />;
         })}
       </div>
+      <Pagination
+        currentPage={currentPage}
+        lastPage={Math.ceil(TOTAL / limit)}
+        total={TOTAL}
+        isPrevBtnDisabled={currentPage === 1}
+        isNextBtnDisabled={currentPage === Math.ceil(TOTAL / limit)}
+        onClickPrev={onClickPrevHandler}
+        onClickNext={onClickNextHandler}
+      />
     </>
   );
 };
